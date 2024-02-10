@@ -22,7 +22,7 @@ public class RobotContainer {
   private double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
 
   /* Setting up bindings for necessary control of the swerve drive platform */
-  private final CommandJoystick joystick = new CommandJoystick(0); // My joystick
+  private final SmoothedJoystick joystick = new SmoothedJoystick(0, 1.5); // My joystick
   private final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
 
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
@@ -35,10 +35,10 @@ public class RobotContainer {
 
   private void configureBindings() {
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
-        drivetrain.applyRequest(() -> drive.withVelocityX(mapValue(-joystick.getY()) * MaxSpeed) // Drive forward with
+        drivetrain.applyRequest(() -> drive.withVelocityX(-joystick.getY() * MaxSpeed) // Drive forward with
                                                                                            // negative Y (forward)
-            .withVelocityY(mapValue(-joystick.getX()) * MaxSpeed) // Drive left with negative X (left)
-            .withRotationalRate(mapValue(-joystick.getTwist()) * MaxAngularRate) // Drive counterclockwise with negative X (left)
+            .withVelocityY(-joystick.getX() * MaxSpeed) // Drive left with negative X (left)
+            .withRotationalRate(-joystick.getTwist() * MaxAngularRate) // Drive counterclockwise with negative X (left)
         ));
 
     //joystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
@@ -62,14 +62,4 @@ public class RobotContainer {
     return Commands.print("No autonomous command configured");
   }
 
-  private double mapValue(double rawValue){
-    if (rawValue < 0){
-      rawValue *= -1;
-      Math.pow(rawValue, 1.5);
-      return rawValue * -1;
-    }
-    else{
-      return Math.pow(rawValue, 1.5);
-    }
-  }
 }
