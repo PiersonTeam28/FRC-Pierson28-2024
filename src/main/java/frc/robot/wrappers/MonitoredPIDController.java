@@ -1,11 +1,10 @@
-package frc.robot.autos;
+package frc.robot.wrappers;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class MonitoredPIDController extends PIDController implements Sendable{
+public class MonitoredPIDController extends PIDController{
     private String name;
     private double lastOutput;
 

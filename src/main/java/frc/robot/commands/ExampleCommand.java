@@ -4,11 +4,10 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.RobotContainer;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ExampleSubsystem;
 
-public class ExampleCommand extends CommandBase {
+public class ExampleCommand extends Command {
   /** Creates a new CloseClaw. */
   ExampleSubsystem exampleSubsystem;
 
