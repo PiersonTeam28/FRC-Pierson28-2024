@@ -16,6 +16,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.wrappers.MonitoredPIDController;
 
@@ -23,9 +24,9 @@ public class AutoDriveCommand extends Command {
   private final Timer timer = new Timer();
   private final Trajectory trajectory;
   private final HolonomicDriveController controller;
-  private final CommandSwerveDrivetrain drivetrain;
+  private final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain;
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-      .withDeadband(Constants.MaxSpeed * 0.1).withRotationalDeadband(Constants.MaxAngularRate * 0.1) // Add a 10% deadband
+      .withDeadband(Constants.MaxSpeed * .1).withRotationalDeadband(Constants.MaxAngularRate * 0.1) // Add a 10% deadband
       .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
 
   public AutoDriveCommand(CommandSwerveDrivetrain drivetrain, Trajectory trajectory) {
@@ -37,7 +38,6 @@ public class AutoDriveCommand extends Command {
     MonitoredPIDController xController = new MonitoredPIDController(Constants.AutoConstants.kPX, Constants.AutoConstants.kIX, Constants.AutoConstants.kDX, "X PID Controller");
     MonitoredPIDController yController = new MonitoredPIDController(Constants.AutoConstants.kPY, Constants.AutoConstants.kIY, Constants.AutoConstants.kDY, "Y PID Controller");
 
-    this.drivetrain = drivetrain;
     this.trajectory = trajectory;
     this.controller = new HolonomicDriveController(
       requireNonNullParam(xController, "xController", "SwerveControllerCommand"),
@@ -55,17 +55,19 @@ public class AutoDriveCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double curTime = timer.get();
+    if (timer.get() > 2){
+    double curTime = timer.get() - 2;
+    System.out.println(curTime);
     var desiredState = trajectory.sample(curTime);
     var desiredRotation = trajectory.getStates().get(trajectory.getStates().size() - 1).poseMeters.getRotation();
 
     ChassisSpeeds targetChassisSpeeds = controller.calculate(drivetrain.getCachedPose(), desiredState, desiredRotation);
-
-    drivetrain.applyRequest(() -> drive.withVelocityX(targetChassisSpeeds.vyMetersPerSecond) // Drive forward with
+    drivetrain.applyRequest(() -> drive.withVelocityX(targetChassisSpeeds.vxMetersPerSecond) // Drive forward with
                                                                                            // negative Y (forward)
-            .withVelocityY(targetChassisSpeeds.vxMetersPerSecond) // Drive left with negative X (left)
+            .withVelocityY(targetChassisSpeeds.vyMetersPerSecond) // Drive left with negative X (left)
             .withRotationalRate(targetChassisSpeeds.omegaRadiansPerSecond) // Drive counterclockwise with negative X (left)
         );
+    }
   }
 
   // Called once the command ends or is interrupted.

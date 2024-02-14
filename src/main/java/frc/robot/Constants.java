@@ -13,8 +13,8 @@ public final class Constants {
         public static final double kMaxAccelerationMetersPerSecondSquared = 3;
         public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI / 4;
         public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI / 4;
-        public static final double kPX = .5;
-        public static final double kPY = .5;
+        public static final double kPX = 10;
+        public static final double kPY = 10;
         public static final double kIX = 0;
         public static final double kIY = 0;
         public static final double kDX = 0;
