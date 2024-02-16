@@ -6,7 +6,6 @@ package frc.robot.commands;
 
 import static edu.wpi.first.util.ErrorMessages.requireNonNullParam;
 
-import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 
 import edu.wpi.first.math.controller.HolonomicDriveController;
@@ -14,6 +13,7 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.generated.TunerConstants;
@@ -25,9 +25,6 @@ public class AutoDriveCommand extends Command {
   private final Trajectory trajectory;
   private final HolonomicDriveController controller;
   private final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain;
-  private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-      .withDeadband(Constants.MaxSpeed * .1).withRotationalDeadband(Constants.MaxAngularRate * 0.1) // Add a 10% deadband
-      .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
 
   public AutoDriveCommand(CommandSwerveDrivetrain drivetrain, Trajectory trajectory) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -55,24 +52,21 @@ public class AutoDriveCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (timer.get() > 2){
-    double curTime = timer.get() - 2;
-    System.out.println(curTime);
+    double curTime = timer.get();
     var desiredState = trajectory.sample(curTime);
     var desiredRotation = trajectory.getStates().get(trajectory.getStates().size() - 1).poseMeters.getRotation();
 
     ChassisSpeeds targetChassisSpeeds = controller.calculate(drivetrain.getCachedPose(), desiredState, desiredRotation);
-    drivetrain.applyRequest(() -> drive.withVelocityX(targetChassisSpeeds.vxMetersPerSecond) // Drive forward with
-                                                                                           // negative Y (forward)
-            .withVelocityY(targetChassisSpeeds.vyMetersPerSecond) // Drive left with negative X (left)
-            .withRotationalRate(targetChassisSpeeds.omegaRadiansPerSecond) // Drive counterclockwise with negative X (left)
-        );
-    }
+    drivetrain.setControl(
+    Constants.drive.withVelocityX(targetChassisSpeeds.vxMetersPerSecond).withVelocityY(targetChassisSpeeds.vyMetersPerSecond).withRotationalRate(targetChassisSpeeds.omegaRadiansPerSecond));
+    SmartDashboard.putNumber("Robot x", drivetrain.getCachedPose().getX());
+    SmartDashboard.putNumber("Robot y", drivetrain.getCachedPose().getY());
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    drivetrain.setControl(Constants.brake);
     timer.stop();
   }
 
