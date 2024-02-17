@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.wrappers.SmoothedJoystick;
-import frc.robot.autos.Auto;
+import frc.robot.autos.AutoRoutines;
 
 public class RobotContainer {
   
@@ -51,7 +51,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return new Auto(drivetrain);
+    return AutoRoutines.drive(drivetrain);
   }
 
 }

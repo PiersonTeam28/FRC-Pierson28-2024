@@ -1,15 +1,17 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.commands.ShootCommand;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
 
 public class PizzaBox extends SubsystemBase {
-    private final CANSparkMax leftShooterMotor;
-    private final CANSparkMax rightShooterMotor;
-    private final TalonFX holdingMotor;
+    private CANSparkMax leftShooterMotor;
+    private CANSparkMax rightShooterMotor;
+    private TalonFX holdingMotor;
 
     public PizzaBox() {
         leftShooterMotor = new CANSparkMax(-1, CANSparkLowLevel.MotorType.kBrushless);
@@ -20,18 +22,44 @@ public class PizzaBox extends SubsystemBase {
 
     }
 
-    public void intake(){
-
+    public void startShootMotors(){
+        leftShooterMotor.setVoltage(12);
     }
 
-    public void shoot(){
-
+    public void startIntakeMotors(){
+        leftShooterMotor.setVoltage(-5);
+        holdingMotor.setVoltage(-5);
     }
 
-    public void dispense(){
-
+    public void startDispenseMotors(){
+        leftShooterMotor.setVoltage(3);
+        holdingMotor.setVoltage(3);
     }
-    
+
+    public void releaseHoldingMotor(){
+        holdingMotor.setVoltage(3);
+    }
+
+    public void stopAllMotors(){
+        leftShooterMotor.stopMotor();
+        holdingMotor.stopMotor();
+    }
+
+    public ShootCommand shoot(){
+        return new ShootCommand(this);
+    }
+
+    public InstantCommand intake(){
+        return new InstantCommand(() -> this.startIntakeMotors(), this);
+    }
+
+    public InstantCommand stop(){
+        return new InstantCommand(() -> this.stopAllMotors());
+    }
+
+    public InstantCommand dispense(){
+        return new InstantCommand(() -> this.startDispenseMotors());
+    }
     
     @Override
     public void periodic(){

@@ -33,4 +33,12 @@ public final class Constants {
         public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
                 kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
     }
+
+    public static final class ArmPositions{
+      public static final double STOW = 0;
+      // All positions are based on when robot is up agains the respective field object
+      public static final double SOURCE = 10;
+      public static final double SPEAKER = 20;
+      public static final double AMP = 30;
+    }
 }

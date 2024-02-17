@@ -6,12 +6,15 @@ package frc.robot.commands;
 
 import static edu.wpi.first.util.ErrorMessages.requireNonNullParam;
 
-import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
+import java.util.Arrays;
 
 import edu.wpi.first.math.controller.HolonomicDriveController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -26,8 +29,7 @@ public class AutoDriveCommand extends Command {
   private final HolonomicDriveController controller;
   private final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain;
 
-  public AutoDriveCommand(CommandSwerveDrivetrain drivetrain, Trajectory trajectory) {
-    // Use addRequirements() here to declare subsystem dependencies.
+  public AutoDriveCommand(CommandSwerveDrivetrain drivetrain, Pose2d... points) {
     ProfiledPIDController thetaController =
             new ProfiledPIDController(
                 Constants.AutoConstants.kPTheta, 0 , 0, Constants.AutoConstants.kThetaControllerConstraints);
@@ -35,7 +37,15 @@ public class AutoDriveCommand extends Command {
     MonitoredPIDController xController = new MonitoredPIDController(Constants.AutoConstants.kPX, Constants.AutoConstants.kIX, Constants.AutoConstants.kDX, "X PID Controller");
     MonitoredPIDController yController = new MonitoredPIDController(Constants.AutoConstants.kPY, Constants.AutoConstants.kIY, Constants.AutoConstants.kDY, "Y PID Controller");
 
-    this.trajectory = trajectory;
+    TrajectoryConfig config =
+                new TrajectoryConfig(
+                        Constants.AutoConstants.kMaxSpeedMetersPerSecond,
+                        Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared)
+                    .setKinematics(drivetrain.getKinematics());
+
+    this.trajectory =  TrajectoryGenerator.generateTrajectory(Arrays.asList(points), config);
+
+
     this.controller = new HolonomicDriveController(
       requireNonNullParam(xController, "xController", "SwerveControllerCommand"),
       requireNonNullParam(yController, "yController", "SwerveControllerCommand"),
