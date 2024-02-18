@@ -7,16 +7,15 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
 public final class Constants {
     public static final double stickDeadband = 0.05;
-    public static final double MaxSpeed = 6; // 6 meters per second desired top speed
-    public static final double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
+    public static final double MaxSpeed = 6;
+    public static final double MaxAngularRate = 1.5 * Math.PI;
     public static final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-      .withDeadband(Constants.MaxSpeed * 0.1).withRotationalDeadband(Constants.MaxAngularRate * 0.1) // Add a 10% deadband
-      .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric
+      .withDeadband(Constants.MaxSpeed * 0.1).withRotationalDeadband(Constants.MaxAngularRate * 0.1)
+      .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
     public static final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
   
 
-    public static final class AutoConstants { // TODO: The below constants are used in the example auto, and must be
-                                              // tuned to specific robot
+    public static final class AutoConstants {
         public static final double kMaxSpeedMetersPerSecond = 1;
         public static final double kMaxAccelerationMetersPerSecondSquared = 3;
         public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI / 4;
@@ -37,8 +36,13 @@ public final class Constants {
     public static final class ArmPositions{
       public static final double STOW = 0;
       // All positions are based on when robot is up agains the respective field object
-      public static final double SOURCE = 10;
-      public static final double SPEAKER = 20;
-      public static final double AMP = 30;
+      public static final double SOURCE = degreesToRotations(3.940);
+      public static final double SPEAKER = degreesToRotations(2.185);
+      public static final double AMP = degreesToRotations(42.648);
+      private static double degreesToRotations(double degrees){
+        // Conversion factor based on 48:1 -> 56:20 gear reduction for Falcon driving the arm (134.4 rotations of motor to 1 rotation of arm)
+        return degrees * (28.0/75.0);
+    }
+    
     }
 }
