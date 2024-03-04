@@ -6,7 +6,11 @@ import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class Arm extends SubsystemBase {
     private TalonFX motor;
@@ -28,9 +32,9 @@ public class Arm extends SubsystemBase {
 
         // set Motion Magic settings
         var motionMagicConfigs = talonFXConfigs.MotionMagic;
-        motionMagicConfigs.MotionMagicCruiseVelocity = 80; // Target cruise velocity of 80 rps
-        motionMagicConfigs.MotionMagicAcceleration = 160; // Target acceleration of 160 rps/s (0.5 seconds)
-        motionMagicConfigs.MotionMagicJerk = 1600; // Target jerk of 1600 rps/s/s (0.1 seconds)
+        motionMagicConfigs.MotionMagicCruiseVelocity = 10;
+        motionMagicConfigs.MotionMagicAcceleration = 20;
+        motionMagicConfigs.MotionMagicJerk = 200; // Target jerk of 1600 rps/s/s (0.1 seconds)
 
         motor.getConfigurator().apply(talonFXConfigs);
         motor.setPosition(0);
@@ -40,9 +44,32 @@ public class Arm extends SubsystemBase {
         motor.setControl(motionMagicController.withPosition(pose));
     }
 
-    public void down(){
-        double newPosition = motor.getPosition().getValueAsDouble() + .1;
-        motor.setControl(motionMagicController.withPosition(newPosition));
+    public Command down(){
+        return new Command(){
+                        // Called when the command is initially scheduled.
+            @Override
+            public void initialize() {
+                
+            }
+
+            // Called every time the scheduler runs while the command is scheduled.
+            @Override
+            public void execute() {
+                
+            }
+
+            // Called once the command ends or is interrupted.
+            @Override
+            public void end(boolean interrupted) {
+
+            }
+
+            // Returns true when the command should end.
+            @Override
+            public boolean isFinished() {
+                return true;
+            }
+        };
     }
 
     public void up(){
