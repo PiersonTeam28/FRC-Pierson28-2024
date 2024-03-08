@@ -11,8 +11,11 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.PizzaBox;
 import frc.robot.wrappers.SmoothedJoystick;
 import frc.robot.autos.AutoRoutines;
 
@@ -22,6 +25,8 @@ public class RobotContainer {
   private final SmoothedJoystick joystick = new SmoothedJoystick(0, 1.5); // My joystick
   private final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
                                                                // driving in open loop
+  private final Arm arm = new Arm();
+  private final PizzaBox pizza = new PizzaBox();
   private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
   private final Telemetry logger = new Telemetry(Constants.MaxSpeed);
 
@@ -33,13 +38,16 @@ public class RobotContainer {
             .withRotationalRate(-joystick.getTwist() * Constants.MaxAngularRate) // Drive counterclockwise with negative X (left)
         )); 
 
-    joystick.button(6).whileTrue(drivetrain.applyRequest(() -> Constants.brake));
-    joystick.button(7).whileTrue(drivetrain
-       .applyRequest(() -> point.withModuleDirection(new Rotation2d(-joystick.getY(), -joystick.getX()))));
-
-    //reset the field-centric heading on left bumper press
+    joystick.button(9).whileTrue(drivetrain.applyRequest(() -> Constants.brake));
+    joystick.button(7).whileTrue(drivetrain.applyRequest(() -> point.withModuleDirection(new Rotation2d(-joystick.getY(), -joystick.getX()))));
     joystick.button(8).onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
-
+    joystick.button(5).onTrue(new InstantCommand(() -> arm.moveToPose(Constants.ArmPositions.STOW)));
+    joystick.button(3).onTrue(new InstantCommand(() -> arm.moveToPose(Constants.ArmPositions.SPEAKER)));
+    joystick.button(4).onTrue(new InstantCommand(() -> arm.moveToPose(Constants.ArmPositions.SOURCE)));
+    joystick.button(6).onTrue(new InstantCommand(() -> arm.moveToPose(Constants.ArmPositions.AMP)));
+    joystick.trigger().onTrue(pizza.shoot());
+    joystick.button(2).onTrue(pizza.intake()).onFalse(pizza.stop());
+    
     if (Utils.isSimulation()) {
       drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
     }
