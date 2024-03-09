@@ -14,11 +14,10 @@ public class PizzaBox extends SubsystemBase {
     private TalonFX holdingMotor;
 
     public PizzaBox() {
-        leftShooterMotor = new CANSparkMax(-1, CANSparkLowLevel.MotorType.kBrushless);
-        rightShooterMotor = new CANSparkMax(-2, CANSparkLowLevel.MotorType.kBrushless);
-        rightShooterMotor.follow(leftShooterMotor);
-        rightShooterMotor.setInverted(true);
-        holdingMotor = new TalonFX(-3);
+        leftShooterMotor = new CANSparkMax(21, CANSparkLowLevel.MotorType.kBrushless);
+        rightShooterMotor = new CANSparkMax(20, CANSparkLowLevel.MotorType.kBrushless);
+        rightShooterMotor.follow(leftShooterMotor, true);
+        holdingMotor = new TalonFX(19);
 
     }
 

@@ -14,7 +14,7 @@ public class Arm extends SubsystemBase {
 
     public Arm() {
         // TO DO: Perfect slot configs for motor control
-        motor = new TalonFX(-4);
+        motor = new TalonFX(23);
         var talonFXConfigs = new TalonFXConfiguration();
         // set slot 0 gains
         var slot0Configs = talonFXConfigs.Slot0;
