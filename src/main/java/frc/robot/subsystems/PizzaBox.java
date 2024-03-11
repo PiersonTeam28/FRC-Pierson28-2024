@@ -14,8 +14,8 @@ public class PizzaBox extends SubsystemBase {
     private TalonFX holdingMotor;
 
     public PizzaBox() {
-        leftShooterMotor = new CANSparkMax(21, CANSparkLowLevel.MotorType.kBrushless);
-        rightShooterMotor = new CANSparkMax(20, CANSparkLowLevel.MotorType.kBrushless);
+        leftShooterMotor = new CANSparkMax(20, CANSparkLowLevel.MotorType.kBrushless);
+        rightShooterMotor = new CANSparkMax(21, CANSparkLowLevel.MotorType.kBrushless);
         rightShooterMotor.follow(leftShooterMotor, true);
         holdingMotor = new TalonFX(19);
 
@@ -26,6 +26,7 @@ public class PizzaBox extends SubsystemBase {
     }
 
     public void startIntakeMotors(){
+        System.out.println("intaking");
         leftShooterMotor.setVoltage(-5);
         holdingMotor.setVoltage(-5);
     }
@@ -40,6 +41,7 @@ public class PizzaBox extends SubsystemBase {
     }
 
     public void stopAllMotors(){
+        System.out.println("stop");
         leftShooterMotor.stopMotor();
         holdingMotor.stopMotor();
     }
@@ -53,7 +55,7 @@ public class PizzaBox extends SubsystemBase {
     }
 
     public InstantCommand stop(){
-        return new InstantCommand(() -> this.stopAllMotors());
+        return new InstantCommand(() -> this.stopAllMotors(), this);
     }
 
     public InstantCommand dispense(){
