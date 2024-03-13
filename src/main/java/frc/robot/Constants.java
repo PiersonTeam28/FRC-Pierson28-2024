@@ -7,7 +7,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
 public final class Constants {
     public static final double stickDeadband = 0.05;
-    public static final double MaxSpeed = 6;
+    public static final double MaxSpeed = 3;
     public static final double MaxAngularRate = 1.5 * Math.PI;
     public static final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
       .withDeadband(Constants.MaxSpeed * 0.1).withRotationalDeadband(Constants.MaxAngularRate * 0.1)

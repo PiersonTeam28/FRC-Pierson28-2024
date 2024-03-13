@@ -36,7 +36,7 @@ public class Arm extends SubsystemBase {
     }
 
     public void moveToPose(double pose){
-        motor.setControl(motionMagicController.withPosition(pose));
+        System.out.println(motor.setControl(motionMagicController.withPosition(pose)));
     }
 
     public Command down(){
