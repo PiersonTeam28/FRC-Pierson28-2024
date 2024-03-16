@@ -1,9 +1,12 @@
 package frc.robot.subsystems;
 
+import java.util.function.BooleanSupplier;
+
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -39,40 +42,42 @@ public class Arm extends SubsystemBase {
         System.out.println(motor.setControl(motionMagicController.withPosition(pose)));
     }
 
-    public Command down(){
+    private Command move(BooleanSupplier press, double speed){
         return new Command(){
-                        // Called when the command is initially scheduled.
-            @Override
             public void initialize() {
-                
+                motor.set(speed);
             }
-
-            // Called every time the scheduler runs while the command is scheduled.
-            @Override
-            public void execute() {
-                
-            }
-
-            // Called once the command ends or is interrupted.
-            @Override
+        
             public void end(boolean interrupted) {
-
+                motor.stopMotor();
             }
 
-            // Returns true when the command should end.
-            @Override
             public boolean isFinished() {
-                return true;
+                if (motor.getPosition().getValueAsDouble() <= -85){
+                    motor.setPosition(-85);
+                    return true;
+                }
+                if (motor.getPosition().getValueAsDouble() > 0){
+                    motor.setPosition(0);
+                    return true;
+                }
+                if (!press.getAsBoolean())
+                    return true;
+                return false;
             }
         };
     }
 
-    public void up(){
-        motor.setVoltage(-2);
+    public Command up(BooleanSupplier press){
+        return move(press, -.4);
+    }
+
+    public Command down(BooleanSupplier press){
+        return move(press, .4);
     }
     
     @Override
     public void periodic(){
-        
+        SmartDashboard.putNumber("Arm Position", motor.getPosition().getValueAsDouble());
     }
 }

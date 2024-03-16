@@ -47,7 +47,9 @@ public class RobotContainer {
     joystick.button(6).onTrue(new InstantCommand(() -> arm.moveToPose(Constants.ArmPositions.AMP)));
     joystick.trigger().onTrue(pizza.shoot());
     joystick.button(2).onTrue(pizza.intake()).onFalse(pizza.stop());
-    
+    joystick.povUp().onTrue(arm.up(joystick.povUp()));
+    joystick.povDown().onTrue(arm.down(joystick.povDown()));
+
     if (Utils.isSimulation()) {
       drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
     }

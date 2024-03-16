@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.hal.simulation.SpiReadAutoReceiveBufferCallback;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -31,7 +30,7 @@ public class PizzaBox extends SubsystemBase {
 
     public void startIntakeMotors(){
         System.out.println("intaking");
-        leftShooterMotor.set(1);
+        leftShooterMotor.set(.5);
         holdingMotor.setVoltage(5);
     }
 
