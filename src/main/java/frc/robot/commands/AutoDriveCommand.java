@@ -19,7 +19,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.wrappers.MonitoredPIDController;
 
@@ -27,9 +26,10 @@ public class AutoDriveCommand extends Command {
   private final Timer timer = new Timer();
   private final Trajectory trajectory;
   private final HolonomicDriveController controller;
-  private final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain;
+  private final CommandSwerveDrivetrain drivetrain;
 
   public AutoDriveCommand(CommandSwerveDrivetrain drivetrain, Pose2d... points) {
+    this.drivetrain = drivetrain;
     ProfiledPIDController thetaController =
             new ProfiledPIDController(
                 Constants.AutoConstants.kPTheta, 0 , 0, Constants.AutoConstants.kThetaControllerConstraints);
