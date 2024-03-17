@@ -36,20 +36,23 @@ public class AlignTag extends Command {
 
   @Override
   public void initialize() {
-    
+    drivetrain.setControl(Constants.drive.withVelocityY(-1));
   }
 
   @Override
   public void execute() {
-    drivetrain.setControl(
-      Constants.drive
-      .withVelocityX(MathUtil.clamp(xController.calculate(limelight.getHorizontalOffset()), -Constants.MaxSpeed, Constants.MaxSpeed))
-      .withVelocityY(MathUtil.clamp(yController.calculate(limelight.getVerticalOffset()), -Constants.MaxSpeed, Constants.MaxSpeed))
-    );
+    if (limelight.seesValidTag()){
+      drivetrain.setControl(
+        Constants.drive
+        .withVelocityY(MathUtil.clamp(xController.calculate(limelight.getHorizontalOffset()), -1, 1))
+        .withVelocityX(MathUtil.clamp(yController.calculate(limelight.getVerticalOffset()), -1, 1))
+      );
+    }
   }
 
   @Override
   public void end(boolean interrupted) {
+    System.out.println("end");
     drivetrain.setControl(Constants.brake);
   }
 

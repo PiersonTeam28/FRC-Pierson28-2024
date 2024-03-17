@@ -6,12 +6,14 @@ package frc.robot;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
 
-public class Limelight{
+public class Limelight extends SubsystemBase{
   private NetworkTable table;
-  private final int[] VALID_IDS = {11};
+  private final int[] VALID_IDS = {3};
 
   public Limelight(){
     this.table = NetworkTableInstance.getDefault().getTable("limelight");
@@ -44,6 +46,11 @@ public class Limelight{
     return table.getEntry("ty").getDouble(0.0);
   }
 
+    @Override
+    public void periodic(){
+      SmartDashboard.putNumber("Horizontal Offset", getHorizontalOffset());
+      SmartDashboard.putNumber("Vertical Offset", getVerticalOffset());
+    }
   
 
 }

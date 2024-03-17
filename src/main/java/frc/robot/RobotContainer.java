@@ -27,6 +27,7 @@ public class RobotContainer {
                                                                // driving in open loop
   private final Arm arm = new Arm();
   private final PizzaBox pizza = new PizzaBox();
+  private final Limelight limelight = new Limelight();
   private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
   private final Telemetry logger = new Telemetry(Constants.MaxSpeed);
 
@@ -61,7 +62,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return null;
+    return AutoRoutines.Amp.routine(drivetrain, arm, pizza, limelight);
   }
 
 }

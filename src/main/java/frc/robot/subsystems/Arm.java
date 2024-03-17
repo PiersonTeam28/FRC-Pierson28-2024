@@ -53,8 +53,8 @@ public class Arm extends SubsystemBase {
             }
 
             public boolean isFinished() {
-                if (motor.getPosition().getValueAsDouble() <= -85){
-                    motor.setPosition(-85);
+                if (motor.getPosition().getValueAsDouble() <= -70){
+                    motor.setPosition(-70);
                     return true;
                 }
                 if (motor.getPosition().getValueAsDouble() > 0){
