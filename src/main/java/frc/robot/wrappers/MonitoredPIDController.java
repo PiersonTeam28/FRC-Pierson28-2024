@@ -7,28 +7,36 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class MonitoredPIDController extends PIDController{
     private String name;
     private double lastOutput;
+    private boolean disabled;
 
     public MonitoredPIDController(double p, double i, double d, String name){
         super(p, i, d);
         this.name = name;
         lastOutput = 0;
+        disabled = false;
     }
 
     @Override
     public double calculate(double measurement){
-        SmartDashboard.putNumber(name + " Input", measurement);
-        double output = super.calculate(measurement);
-        SmartDashboard.putNumber(name + " Output", output);
-        return output;
+        if (!disabled){
+            SmartDashboard.putNumber(name + " Input", measurement);
+            double output = super.calculate(measurement);
+            SmartDashboard.putNumber(name + " Output", output);
+            return output;
+        }
+        return 0;
     }
     
     @Override
     public double calculate(double measurement, double setpoint){
-        SmartDashboard.putNumber(name + " Input", measurement);
-        SmartDashboard.putNumber(name + " Setpoint", setpoint);
-        lastOutput = super.calculate(measurement, setpoint);
-        SmartDashboard.putNumber(name + " Output", lastOutput);
-        return lastOutput;
+        if (!disabled){
+            SmartDashboard.putNumber(name + " Input", measurement);
+            SmartDashboard.putNumber(name + " Setpoint", setpoint);
+            lastOutput = super.calculate(measurement, setpoint);
+            SmartDashboard.putNumber(name + " Output", lastOutput);
+            return lastOutput;
+        }
+        return 0;
     }
 
     @Override 
@@ -41,5 +49,17 @@ public class MonitoredPIDController extends PIDController{
         builder.addDoubleProperty("Setpoint", this::getSetpoint, null);
         builder.addDoubleProperty("Output", () -> lastOutput, null);
         System.out.println("################## initSendable done");
+    }
+
+    public void disable(){
+        disabled = true;
+    }
+
+    public void enable(){
+        disabled = false;
+    }
+
+    public boolean isDisabled(){
+        return disabled;
     }
 }

@@ -36,6 +36,14 @@ public class Limelight{
     return table.getEntry("botpose_wpiblue").getDoubleArray(new double[6]);
   }
 
+  public double getHorizontalOffset(){
+    return table.getEntry("tx").getDouble(0.0);
+  }
+
+  public double getVerticalOffset(){
+    return table.getEntry("ty").getDouble(0.0);
+  }
+
   
 
 }

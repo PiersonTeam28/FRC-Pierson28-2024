@@ -61,7 +61,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return AutoRoutines.drive(drivetrain);
+    return null;
   }
 
 }
