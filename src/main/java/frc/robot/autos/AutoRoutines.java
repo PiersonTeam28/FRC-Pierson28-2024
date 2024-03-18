@@ -26,9 +26,9 @@ public final class AutoRoutines{
             return new SequentialCommandGroup(
             new InstantCommand(() -> drivetrain.tareEverything(), drivetrain).withTimeout(1),
             new ParallelCommandGroup(
-                new AlignTag(drivetrain, limelight, AlignTag.NO_CHANGE, -10), new InstantCommand(() -> arm.moveToPose(Constants.ArmPositions.AMP))
+                new AlignTag(drivetrain, limelight, AlignTag.NO_CHANGE, -2), new InstantCommand(() -> arm.moveToPose(Constants.ArmPositions.AMP))
             ),
-            new AlignTag(drivetrain, limelight, -20, AlignTag.NO_CHANGE),
+            new AlignTag(drivetrain, limelight, 17.5, AlignTag.NO_CHANGE),
             pizzaBox.shoot()
             );
         }

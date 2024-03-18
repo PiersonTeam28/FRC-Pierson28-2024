@@ -30,7 +30,7 @@ public class Arm extends SubsystemBase {
 
         // set Motion Magic settings
         var motionMagicConfigs = talonFXConfigs.MotionMagic;
-        motionMagicConfigs.MotionMagicCruiseVelocity = 10;
+        motionMagicConfigs.MotionMagicCruiseVelocity = 20;
         motionMagicConfigs.MotionMagicAcceleration = 5;
         motionMagicConfigs.MotionMagicJerk = 200;
 

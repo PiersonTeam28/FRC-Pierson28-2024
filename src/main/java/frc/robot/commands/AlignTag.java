@@ -22,10 +22,10 @@ public class AlignTag extends Command {
   public AlignTag(CommandSwerveDrivetrain drivetrain, Limelight limelight, double desiredHorizontalOffset, double desiredVerticalOffset) {
     this.drivetrain = drivetrain;
     this.limelight = limelight;
-    xController = new MonitoredPIDController(5, 1, .2, "X Controller Align");
+    xController = new MonitoredPIDController(.2, 0, 0, "X Controller Align");
     xController.setSetpoint(desiredHorizontalOffset);
-    xController.setTolerance(.1);
-    yController = new MonitoredPIDController(5, 1, .2, "Y Controller Align");
+    xController.setTolerance(.2);
+    yController = new MonitoredPIDController(1, .1, .2, "Y Controller Align");
     yController.setSetpoint(desiredVerticalOffset);
     yController.setTolerance(.1);
     if (desiredHorizontalOffset == NO_CHANGE)
@@ -42,10 +42,11 @@ public class AlignTag extends Command {
   @Override
   public void execute() {
     if (limelight.seesValidTag()){
+      System.out.println("PID");
       drivetrain.setControl(
         Constants.drive
-        .withVelocityY(MathUtil.clamp(xController.calculate(limelight.getHorizontalOffset()), -1, 1))
-        .withVelocityX(MathUtil.clamp(yController.calculate(limelight.getVerticalOffset()), -1, 1))
+        .withVelocityY(MathUtil.clamp(yController.calculate(limelight.getHorizontalOffset()), -1, 1))
+        .withVelocityX(MathUtil.clamp(xController.calculate(limelight.getVerticalOffset()), -1, 1))
       );
     }
   }

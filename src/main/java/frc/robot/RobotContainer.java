@@ -41,7 +41,7 @@ public class RobotContainer {
                                                                                            // negative Y (forward)
             .withVelocityY(-joystick.getX() * Constants.MaxSpeed) // Drive left with negative X (left)
             .withRotationalRate(-joystick.getTwist() * Constants.MaxAngularRate) // Drive counterclockwise with negative X (left)
-        )); 
+        ));
 
     joystick.button(9).whileTrue(drivetrain.applyRequest(() -> Constants.brake));
     joystick.button(7).whileTrue(drivetrain.applyRequest(() -> point.withModuleDirection(new Rotation2d(-joystick.getY(), -joystick.getX()))));
@@ -57,7 +57,6 @@ public class RobotContainer {
 
     xboxController.rightTrigger().onTrue(pizza.shoot());
     xboxController.leftTrigger().onTrue(pizza.intake()).onFalse(pizza.stop());
-    xboxController.leftStick().onTrue(arm.up(xboxController.leftStick()));
     xboxController.a().onTrue(new InstantCommand(() -> arm.moveToPose(Constants.ArmPositions.STOW)));
     xboxController.x().onTrue(new InstantCommand(() -> arm.moveToPose(Constants.ArmPositions.SOURCE)));
     xboxController.y().onTrue(new InstantCommand(() -> arm.moveToPose(Constants.ArmPositions.AMP)));
@@ -75,6 +74,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
+    drivetrain.runOnce(() -> drivetrain.seedFieldRelative());
     return AutoRoutines.Amp.routine(drivetrain, arm, pizza, limelight);
   }
 
