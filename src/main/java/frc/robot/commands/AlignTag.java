@@ -22,10 +22,10 @@ public class AlignTag extends Command {
   public AlignTag(CommandSwerveDrivetrain drivetrain, Limelight limelight, double desiredHorizontalOffset, double desiredVerticalOffset) {
     this.drivetrain = drivetrain;
     this.limelight = limelight;
-    xController = new MonitoredPIDController(0, 0, 0, "X Controller Align");
+    xController = new MonitoredPIDController(5, 1, .2, "X Controller Align");
     xController.setSetpoint(desiredHorizontalOffset);
     xController.setTolerance(.1);
-    yController = new MonitoredPIDController(0, 0, 0, "Y Controller Align");
+    yController = new MonitoredPIDController(5, 1, .2, "Y Controller Align");
     yController.setSetpoint(desiredVerticalOffset);
     yController.setTolerance(.1);
     if (desiredHorizontalOffset == NO_CHANGE)

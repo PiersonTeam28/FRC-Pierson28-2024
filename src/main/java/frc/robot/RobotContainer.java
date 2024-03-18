@@ -12,6 +12,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
@@ -21,8 +22,11 @@ import frc.robot.autos.AutoRoutines;
 
 public class RobotContainer {
   
+  
   /* Setting up bindings for necessary control of the swerve drive platform */
   private final SmoothedJoystick joystick = new SmoothedJoystick(0, 1.5); // My joystick
+  private final CommandXboxController xboxController = new CommandXboxController(1);
+
   private final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
                                                                // driving in open loop
   private final Arm arm = new Arm();
@@ -51,6 +55,14 @@ public class RobotContainer {
     joystick.povUp().onTrue(arm.up(joystick.povUp()));
     joystick.povDown().onTrue(arm.down(joystick.povDown()));
 
+    xboxController.rightTrigger().onTrue(pizza.shoot());
+    xboxController.leftTrigger().onTrue(pizza.intake()).onFalse(pizza.stop());
+    xboxController.leftStick().onTrue(arm.up(xboxController.leftStick()));
+    xboxController.a().onTrue(new InstantCommand(() -> arm.moveToPose(Constants.ArmPositions.STOW)));
+    xboxController.x().onTrue(new InstantCommand(() -> arm.moveToPose(Constants.ArmPositions.SOURCE)));
+    xboxController.y().onTrue(new InstantCommand(() -> arm.moveToPose(Constants.ArmPositions.AMP)));
+
+
     if (Utils.isSimulation()) {
       drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
     }
@@ -59,6 +71,7 @@ public class RobotContainer {
 
   public RobotContainer() {
     configureBindings();
+    drivetrain.runOnce(() -> drivetrain.seedFieldRelative());
   }
 
   public Command getAutonomousCommand() {
