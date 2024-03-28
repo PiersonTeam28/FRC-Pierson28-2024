@@ -31,7 +31,7 @@ public class Arm extends SubsystemBase {
         // set Motion Magic settings
         var motionMagicConfigs = talonFXConfigs.MotionMagic;
         motionMagicConfigs.MotionMagicCruiseVelocity = 20;
-        motionMagicConfigs.MotionMagicAcceleration = 5;
+        motionMagicConfigs.MotionMagicAcceleration = 10;
         motionMagicConfigs.MotionMagicJerk = 200;
 
         motor.getConfigurator().apply(talonFXConfigs);
@@ -53,8 +53,8 @@ public class Arm extends SubsystemBase {
             }
 
             public boolean isFinished() {
-                if (motor.getPosition().getValueAsDouble() <= -70){
-                    motor.setPosition(-70);
+                if (motor.getPosition().getValueAsDouble() <= -90){
+                    motor.setPosition(-90);
                     return true;
                 }
                 if (motor.getPosition().getValueAsDouble() > 0){

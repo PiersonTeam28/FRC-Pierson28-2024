@@ -7,8 +7,8 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
 public final class Constants {
     public static final double stickDeadband = 0.05;
-    public static final double MaxSpeed = 3;
-    public static final double MaxAngularRate = 1.5 * Math.PI;
+    public static final double MaxSpeed = 4.5;
+    public static final double MaxAngularRate = 2 * Math.PI;
     public static final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
       .withDeadband(Constants.MaxSpeed * 0.1).withRotationalDeadband(Constants.MaxAngularRate * 0.1)
       .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
@@ -36,9 +36,9 @@ public final class Constants {
     public static final class ArmPositions{
       public static final double STOW = 0;
       // All positions are based on when robot is up agains the respective field object
-      public static final double SOURCE = -25;
+      public static final double SOURCE = -20;
       public static final double SPEAKER = -20;
-      public static final double AMP = -70;
+      public static final double AMP = -86;
       private static double degreesToRotations(double degrees){
         // Conversion factor based on 48:1 -> 56:20 gear reduction for Falcon driving the arm (134.4 rotations of motor to 1 rotation of arm)
         return degrees * (28.0/75.0);

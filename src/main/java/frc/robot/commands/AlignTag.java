@@ -18,10 +18,12 @@ public class AlignTag extends Command {
   private Limelight limelight;
   private MonitoredPIDController xController;
   private MonitoredPIDController yController;
+  private int alliance;
 
-  public AlignTag(CommandSwerveDrivetrain drivetrain, Limelight limelight, double desiredHorizontalOffset, double desiredVerticalOffset) {
+  public AlignTag(CommandSwerveDrivetrain drivetrain, Limelight limelight, double desiredHorizontalOffset, double desiredVerticalOffset, int alliance) {
     this.drivetrain = drivetrain;
     this.limelight = limelight;
+    this.alliance = alliance;
     xController = new MonitoredPIDController(.2, 0, 0, "X Controller Align");
     xController.setSetpoint(desiredHorizontalOffset);
     xController.setTolerance(.2);
@@ -36,13 +38,12 @@ public class AlignTag extends Command {
 
   @Override
   public void initialize() {
-    drivetrain.setControl(Constants.drive.withVelocityY(-1));
+    drivetrain.setControl(Constants.drive.withVelocityY(alliance == 0 ? -1 : 1));
   }
 
   @Override
   public void execute() {
     if (limelight.seesValidTag()){
-      System.out.println("PID");
       drivetrain.setControl(
         Constants.drive
         .withVelocityY(MathUtil.clamp(yController.calculate(limelight.getHorizontalOffset()), -1, 1))

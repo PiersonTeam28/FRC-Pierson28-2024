@@ -11,6 +11,7 @@ import frc.robot.subsystems.Arm;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 
 public final class AutoRoutines{
@@ -22,15 +23,39 @@ public final class AutoRoutines{
             public static final int BLUE_CENTER = 4;
             public static final int BLUE_RIGHT = 5;
 
-            public static SequentialCommandGroup routine(CommandSwerveDrivetrain drivetrain, Arm arm, PizzaBox pizzaBox, Limelight limelight){
+            public static SequentialCommandGroup routine(CommandSwerveDrivetrain drivetrain, Arm arm, PizzaBox pizzaBox, Limelight limelight, int alliance){
             return new SequentialCommandGroup(
             new InstantCommand(() -> drivetrain.tareEverything(), drivetrain).withTimeout(1),
             new ParallelCommandGroup(
-                new AlignTag(drivetrain, limelight, AlignTag.NO_CHANGE, -2), new InstantCommand(() -> arm.moveToPose(Constants.ArmPositions.AMP))
+                new AlignTag(drivetrain, limelight, AlignTag.NO_CHANGE, -2, alliance), new InstantCommand(() -> arm.moveToPose(Constants.ArmPositions.AMP))
             ),
-            new AlignTag(drivetrain, limelight, 17.5, AlignTag.NO_CHANGE),
-            pizzaBox.shoot()
+            //new AlignTag(drivetrain, limelight, 18, AlignTag.NO_CHANGE, alliance),
+            new InstantCommand(() -> drivetrain.setControl(
+                Constants.drive
+                .withVelocityX(.5 * Math.pow(-1, alliance))
+              )),
+            new WaitCommand(1.5),
+            new InstantCommand(() -> drivetrain.applyRequest(() -> Constants.brake)),
+            pizzaBox.shoot(),
+            new WaitCommand(2),
+            new InstantCommand(() -> drivetrain.setControl(
+                Constants.drive
+                .withVelocityY(-1 * Math.pow(-1, alliance))
+                .withVelocityX(.2 * Math.pow(-1, alliance))
+              )),
+              new WaitCommand(3),
+              new InstantCommand(() -> drivetrain.applyRequest(() -> Constants.brake))
             );
+        } 
         }
-        }
+      public static final class Taxi{
+        public static SequentialCommandGroup routine(CommandSwerveDrivetrain drivetrain, Arm arm, PizzaBox pizzaBox, Limelight limelight, int alliance){
+            return new SequentialCommandGroup(
+            new InstantCommand(() -> drivetrain.tareEverything(), drivetrain).withTimeout(1),
+            new InstantCommand(() -> drivetrain.setControl(
+                Constants.drive
+                .withVelocityX(.5 * Math.pow(-1, alliance))
+              )));
+        } 
+      }
 }
