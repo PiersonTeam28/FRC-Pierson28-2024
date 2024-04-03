@@ -48,8 +48,8 @@ public class RobotContainer {
     // joystick.button(7).whileTrue(drivetrain.applyRequest(() -> point.withModuleDirection(new Rotation2d(-joystick.getY(), -joystick.getX()))));
     // joystick.button(8).onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
     joystick.button(5).onTrue(new InstantCommand(() -> arm.moveToPose(Constants.ArmPositions.STOW)));
-    joystick.button(3).onTrue(new InstantCommand(() -> arm.moveToPose(Constants.ArmPositions.SPEAKER)));
     joystick.button(4).onTrue(new InstantCommand(() -> arm.moveToPose(Constants.ArmPositions.SOURCE)));
+    joystick.button(3).onTrue(new InstantCommand(() -> arm.moveToPose(Constants.ArmPositions.SPEAKER)));
     joystick.button(6).onTrue(new InstantCommand(() -> arm.moveToPose(Constants.ArmPositions.AMP)));
     joystick.trigger().onTrue(pizza.shoot());
     joystick.button(2).onTrue(pizza.intake()).onFalse(pizza.stop());
@@ -62,6 +62,7 @@ public class RobotContainer {
     xboxController.leftBumper().onTrue(arm.down(xboxController.leftBumper()));
     xboxController.a().onTrue(new InstantCommand(() -> arm.moveToPose(Constants.ArmPositions.STOW)));
     xboxController.x().onTrue(new InstantCommand(() -> arm.moveToPose(Constants.ArmPositions.SOURCE)));
+    xboxController.b().onTrue(new InstantCommand(() -> arm.moveToPose(Constants.ArmPositions.SPEAKER)));
     xboxController.y().onTrue(new InstantCommand(() -> arm.moveToPose(Constants.ArmPositions.AMP)));
 
 
@@ -78,5 +79,6 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     drivetrain.runOnce(() -> drivetrain.seedFieldRelative());
-    return new InstantCommand(() -> arm.moveToPose(Constants.ArmPositions.AMP));}
+    return AutoRoutines.Amp.routine(drivetrain, arm, pizza, limelight, alliance);
+  }
 }

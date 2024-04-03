@@ -27,7 +27,7 @@ public class AlignTag extends Command {
     xController = new MonitoredPIDController(.2, 0, 0, "X Controller Align");
     xController.setSetpoint(desiredHorizontalOffset);
     xController.setTolerance(.2);
-    yController = new MonitoredPIDController(1, .1, .2, "Y Controller Align");
+    yController = new MonitoredPIDController(.1, .1, .2, "Y Controller Align");
     yController.setSetpoint(desiredVerticalOffset);
     yController.setTolerance(.1);
     if (desiredHorizontalOffset == NO_CHANGE)

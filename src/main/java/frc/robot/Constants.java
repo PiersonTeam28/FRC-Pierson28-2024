@@ -36,13 +36,14 @@ public final class Constants {
     public static final class ArmPositions{
       public static final double STOW = 0;
       // All positions are based on when robot is up agains the respective field object
-      public static final double SOURCE = -20;
-      public static final double SPEAKER = -20;
+      public static final double SOURCE = -21;
+      public static final double SPEAKER = -13.4;
       public static final double AMP = -86;
       private static double degreesToRotations(double degrees){
         // Conversion factor based on 48:1 -> 56:20 gear reduction for Falcon driving the arm (134.4 rotations of motor to 1 rotation of arm)
         return degrees * (28.0/75.0);
     }
+    // 4 inch diameter of roller -> 1 rotation = 4 inches of wire
     
     }
 }

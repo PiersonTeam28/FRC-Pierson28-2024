@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Limelight extends SubsystemBase{
   private NetworkTable table;
-  private final int[] VALID_IDS = {5, 6};
+  private final int[] VALID_IDS = {5, 6, 3};
 
   public Limelight(){
     this.table = NetworkTableInstance.getDefault().getTable("limelight");
